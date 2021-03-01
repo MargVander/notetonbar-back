@@ -5,14 +5,14 @@ import { Bar } from './models/bars.entity';
 
 @Injectable()
 export class BarService {
-    constructor(
-        @InjectRepository(Bar)
-        private barsRepository: Repository<Bar>,
-    ) {}
+  constructor(
+    @InjectRepository(Bar)
+    private barsRepository: Repository<Bar>,
+  ) {}
 
-    findAll(): Promise<Bar[]> {
-        return this.barsRepository.find();
-    }
+  findAll(): Promise<Bar[]> {
+    return this.barsRepository.find();
+  }
 
     findActives(): Promise<Bar[]> {
         return this.barsRepository.createQueryBuilder('bar').leftJoinAndSelect('bar.pictures', 'pictures').where('bar.isactive = 1').getMany()
@@ -23,7 +23,7 @@ export class BarService {
         return this.barsRepository.findOne(id, { relations: ["pictures"] });
     }
 
-    create(id: number): Promise<Bar> {
-        return this.barsRepository.findOne(id);
-    }
+  create(id: number): Promise<Bar> {
+    return this.barsRepository.findOne(id);
+  }
 }
