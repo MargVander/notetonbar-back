@@ -11,7 +11,11 @@ export class ReviewService {
     ) {}
 
     findBarReviews(id: number): Promise<Review[]> {
-        return this.reviewRepository.createQueryBuilder('review').leftJoin('review.bar', 'bar').where('bar.id = :id', {id: id}).andWhere('review.isactive = 1').getMany()
+        return this.reviewRepository.createQueryBuilder('review').leftJoin('review.bar', 'bar').where('bar.id = :id', {id: id}).andWhere('review.isactive = 1').leftJoinAndSelect('review.user', 'user').getMany()
+    }
+
+    findUserReviews(id: number): Promise<Review[]> {
+        return this.reviewRepository.createQueryBuilder('review').leftJoin('review.user', 'user').where('user.id = :id', {id: id}).andWhere('review.isactive = 1').leftJoinAndSelect('review.bar', 'bar').getMany()
     }
 
 }

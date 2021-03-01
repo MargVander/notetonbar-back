@@ -19,7 +19,6 @@ export class BarService {
     }
 
     findOne(id: number): Promise<Bar> {
-        console.log(id)
         return this.barsRepository.findOne(id, { relations: ["pictures"] });
     }
 

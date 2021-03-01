@@ -31,7 +31,6 @@ export class BarController {
         const rating = this.findReviews(param)
             .then(reviews => {
                 const average = reviews.reduce((total, next) => total + next.rating, 0) / reviews.length;
-                console.log(average)
                 return average
             }
         )
