@@ -1,5 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import {Picture} from "../../picture/models/picture.entity";
+import {Review} from "../../review/models/review.entity";
 
 @Entity()
 export class Bar {
@@ -41,4 +42,7 @@ export class Bar {
 
     @OneToMany(() => Picture, picture => picture.bar)
     pictures: Picture[];
+
+    @OneToMany(() => Review, review => review.bar)
+    reviews: Picture[];
 }

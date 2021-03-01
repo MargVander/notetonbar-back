@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, createQueryBuilder } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Bar } from './models/bars.entity';
 
 @Injectable()
@@ -14,11 +14,12 @@ export class BarService {
         return this.barsRepository.find();
     }
 
-    findActives(): Promise<unknown[]> {
+    findActives(): Promise<Bar[]> {
         return this.barsRepository.createQueryBuilder('bar').leftJoinAndSelect('bar.pictures', 'pictures').where('bar.isactive = 1').getMany()
     }
 
     findOne(id: number): Promise<Bar> {
+        console.log(id)
         return this.barsRepository.findOne(id, { relations: ["pictures"] });
     }
 
