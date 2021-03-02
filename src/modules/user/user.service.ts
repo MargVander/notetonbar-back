@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
-import { Follow } from './entities/follow.entity';
 
 @Injectable()
 export class UserService {
@@ -12,23 +11,56 @@ export class UserService {
   ) {}
 
   findAll(): Promise<User[]> {
-    return this.usersReposiroty.find();
+    return this.usersReposiroty
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.followers', 'followers')
+      .leftJoinAndSelect('user.following', 'following')
+      .getMany();
   }
 
-  findOne(id: number): Promise<User> {
-    return this.usersReposiroty.findOne(id);
+  findOne(id: number): Promise<User[]> {
+    return this.usersReposiroty
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.followers', 'followers')
+      .leftJoinAndSelect('user.following', 'following')
+      .where('user.isactive = true')
+      .andWhere('user.id = :id', { id: id })
+      .getMany();
   }
 
   findActives(): Promise<unknown[]> {
     return this.usersReposiroty
       .createQueryBuilder('user')
-
       .leftJoinAndSelect('user.followers', 'followers')
+      .leftJoinAndSelect('user.following', 'following')
       .where('user.isactive = true')
       .getMany();
-    /* .leftJoinAndSelect('user.followers', 'followers')
-           .innerJoinAndSelect(Follow, 'follow', 'follow.followersId = user.id')
+  }
 
-           */
+  addUser(user) {
+    return this.usersReposiroty
+      .createQueryBuilder()
+      .insert()
+      .into('User')
+      .values(user)
+      .execute();
+  }
+
+  deleteUser(id) {
+    return this.usersReposiroty
+      .createQueryBuilder()
+      .update()
+      .set({ isactive: false })
+      .where('id = :id', { id: id.id })
+      .execute();
+  }
+
+  updateUser(user) {
+    return this.usersReposiroty
+      .createQueryBuilder()
+      .update()
+      .set(user)
+      .where('id = :id', { id: user.id })
+      .execute();
   }
 }

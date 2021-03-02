@@ -1,6 +1,15 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { ReviewService } from '../review/review.service';
+import { UserModel } from './model/user.model';
 
 @Controller('user')
 export class UserController {
@@ -22,5 +31,23 @@ export class UserController {
   @Get(':id/reviews')
   async findReviews(@Param() param) {
     return this.reviewService.findUserReviews(param.id);
-}
+  }
+
+  @Post()
+  addUser(@Body() user) {
+    console.log(Object.assign(new UserModel(), user));
+    return this.usersService.addUser(Object.assign(new UserModel(), user));
+  }
+
+  @Delete()
+  deleteUser(@Body() id) {
+    console.log(id.id);
+    return this.usersService.deleteUser(id);
+  }
+
+  @Put()
+  updateUser(@Body() user) {
+    console.log(user);
+    return this.usersService.updateUser(Object.assign(new UserModel(), user));
+  }
 }
