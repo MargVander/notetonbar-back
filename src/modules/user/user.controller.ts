@@ -8,11 +8,12 @@ import {
   Put,
 } from '@nestjs/common';
 import { UserService } from './user.service';
+import { ReviewService } from '../review/review.service';
 import { UserModel } from './model/user.model';
 
 @Controller('user')
 export class UserController {
-  constructor(private usersService: UserService) {}
+  constructor(private usersService: UserService, private reviewService: ReviewService) {}
 
   @Get('/all')
   async findAll() {
@@ -25,6 +26,11 @@ export class UserController {
   @Get()
   async findActives() {
     return this.usersService.findActives();
+  }
+
+  @Get(':id/reviews')
+  async findReviews(@Param() param) {
+    return this.reviewService.findUserReviews(param.id);
   }
 
   @Post()

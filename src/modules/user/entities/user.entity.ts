@@ -1,8 +1,10 @@
+import { Review } from '../../review/models/review.entity'
 import {
   Column,
   Entity,
   JoinTable,
   ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -34,6 +36,10 @@ export class User {
   })
   followers: User[];
 
+  @OneToMany(() => Review, (review) => review.user)
+  reviews: Review[];
+
+  
   @ManyToMany(() => User, (user) => user.followers)
   following: User[];
 }
