@@ -1,11 +1,20 @@
-export class User {
-  private pseudo;
-  private password;
-  private mail;
-  private profile_picture;
-  private isactive;
+export class UserModel {
+  private id: number;
+  private pseudo: string;
+  private password: string;
+  private mail: string;
+  private profile_picture: string;
+  private isactive: boolean;
 
-  constructor(pseudo, password, mail, profile_picture, isactive) {
+  constructor(
+    id = undefined,
+    pseudo = '',
+    password = '',
+    mail = '',
+    profile_picture = '',
+    isactive = true,
+  ) {
+    this.id = id;
     this.pseudo = pseudo;
     this.password = password;
     this.mail = mail;

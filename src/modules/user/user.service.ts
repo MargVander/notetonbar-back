@@ -37,11 +37,30 @@ export class UserService {
       .getMany();
   }
 
-  addUser(newUser) {
+  addUser(user) {
     return this.usersReposiroty
       .createQueryBuilder()
       .insert()
       .into('User')
-      .values(newUser);
+      .values(user)
+      .execute();
+  }
+
+  deleteUser(id) {
+    return this.usersReposiroty
+      .createQueryBuilder()
+      .update()
+      .set({ isactive: false })
+      .where('id = :id', { id: id.id })
+      .execute();
+  }
+
+  updateUser(user) {
+    return this.usersReposiroty
+      .createQueryBuilder()
+      .update()
+      .set(user)
+      .where('id = :id', { id: user.id })
+      .execute();
   }
 }
