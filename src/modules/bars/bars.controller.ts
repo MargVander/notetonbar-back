@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Param } from '@nestjs/common';
+import { Controller, Get, Post, Put, Param, Body, Delete } from '@nestjs/common';
 import { BarService } from './bars.service';
 import { ReviewService } from '../review/review.service';
+import { CreateBarDto } from './models/create-bar.dto'
 
 @Controller('bars')
 export class BarController {
@@ -37,8 +38,18 @@ export class BarController {
         return rating
     }
 
-    // @Post() 
-    // async create(@Param() param) {
-    //     return this.barsService.create(param);
-    // }
+    @Post() 
+    async create(@Body() datas:CreateBarDto) {
+        return this.barsService.addBar(datas);
+    }
+
+    @Put(':id')
+    async update(@Body() datas:CreateBarDto, @Param() param) {
+        return this.barsService.updateBar(datas, param.id)
+    }
+
+    @Delete(':id')
+    async delete(@Param() param) {
+        return this.barsService.deleteBar(param.id)
+    }
 }

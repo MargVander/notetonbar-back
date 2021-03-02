@@ -22,13 +22,13 @@ export class Bar {
     @Column()
     zip_code: number;
 
-    @Column()
+    @Column({ type: 'json', nullable: true })
     hours: string;
 
     @Column()
     happy_hour: string;
 
-    @Column()
+    @Column({ type: 'json', nullable: true })
     coords: string;
 
     @Column()
