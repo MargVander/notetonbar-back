@@ -1,5 +1,6 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { UserService } from './user.service';
+import { User } from './model/user.model';
 
 @Controller('user')
 export class UserController {
@@ -17,4 +18,14 @@ export class UserController {
   async findActives() {
     return this.usersService.findActives();
   }
+
+  @Post()
+  async addUser(@Body() newUser: any) {
+    console.log(new User(...newUser));
+    return 'ok';
+  }
+
+  //@Delete()
+
+  //@Put()
 }

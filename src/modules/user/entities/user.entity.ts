@@ -1,5 +1,10 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Follow } from './follow.entity';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity('user')
 export class User {
@@ -21,9 +26,14 @@ export class User {
   @Column({ default: true })
   isactive: boolean;
 
-  @OneToMany(() => Follow, (follow) => follow.followers)
+  @ManyToMany(() => User, (user) => user.following)
+  @JoinTable({
+    name: 'follow',
+    joinColumn: { name: 'followers' },
+    inverseJoinColumn: { name: 'following' },
+  })
   followers: User[];
 
-  @OneToMany(() => Follow, (follow) => follow.followed)
-  followed: User[];
+  @ManyToMany(() => User, (user) => user.followers)
+  following: User[];
 }
