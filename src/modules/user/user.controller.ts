@@ -13,7 +13,10 @@ import { UserModel } from './model/user.model';
 
 @Controller('user')
 export class UserController {
-  constructor(private usersService: UserService, private reviewService: ReviewService) {}
+  constructor(
+    private usersService: UserService,
+    private reviewService: ReviewService,
+  ) {}
 
   @Get('/all')
   async findAll() {
@@ -31,6 +34,11 @@ export class UserController {
   @Get(':id/reviews')
   async findReviews(@Param() param) {
     return this.reviewService.findUserReviews(param.id);
+  }
+
+  @Get('/connect/connect')
+  async findUserAuth(@Body() user) {
+    return this.usersService.findOneToConnect(user.pseudo);
   }
 
   @Post()
