@@ -11,4 +11,7 @@ export class Picture {
 
     @ManyToOne(() => Bar, bar => bar.pictures)
     bar: Bar;
+
+    @Column({ type: "int", nullable: false })
+    barId: number;
 }
