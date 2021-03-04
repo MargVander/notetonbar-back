@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Bar } from './models/bars.entity';
-import { CreateBarDto } from './models/create-bar.dto'
 
 @Injectable()
 export class BarService {
