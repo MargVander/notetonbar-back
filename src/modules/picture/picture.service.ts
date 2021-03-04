@@ -19,6 +19,11 @@ export class PictureService {
   }
 
   deletePicture(id: number) {
-    return this.picturesRepository.delete({id: id})
+    return this.picturesRepository
+    .createQueryBuilder()
+    .delete()
+    .from(Picture)
+    .where("id = :id", { id: id })
+    .execute();
   }
 }

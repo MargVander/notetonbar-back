@@ -40,10 +40,14 @@ export class PictureController {
     }
 
     @Delete(':fileId')
-    async deletePicture(@Param('fileId') fileId, @Res() res, @Body() body): Promise<any> {
+    async deletePicture(@Param('fileId') fileId, @Body() body): Promise<any> {
         const fs = require('fs')
         const path = fileId
-        fs.unlinkSync(`photos/${path}`)
+        try {
+            fs.unlinkSync(`photos/${path}`)
+        } catch (err) {
+            return err
+        }
         return this.pictureService.deletePicture(body.id)
     }
 }
