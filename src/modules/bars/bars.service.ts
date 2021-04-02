@@ -15,7 +15,12 @@ export class BarService {
   }
 
   findActives(): Promise<Bar[]> {
-    return this.barsRepository.createQueryBuilder('bar').leftJoinAndSelect('bar.pictures', 'pictures').where('bar.isactive = 1').getMany()
+    return this.barsRepository
+    .createQueryBuilder('bar')
+    .leftJoinAndSelect('bar.pictures', 'pictures')
+    .leftJoinAndSelect('bar.rating', 'bar_reviews')
+    .where('bar.isactive = 1')
+    .getMany()
   }
 
   findOne(id: number): Promise<Bar> {
