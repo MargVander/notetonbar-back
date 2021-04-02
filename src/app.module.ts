@@ -8,6 +8,9 @@ import { PictureModule } from './modules/picture/picture.module';
 import { ReviewModule } from './modules/review/review.module';
 import { FollowModule } from './modules/follow/follow.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter'
+import { pathToFileURL } from 'url';
 
 @Module({
   imports: [
@@ -18,8 +21,31 @@ import { AuthModule } from './modules/auth/auth.module';
     ReviewModule,
     FollowModule,
     AuthModule,
+    MailerModule.forRootAsync({
+      useFactory: () => ({
+        transport: 'smtps://user@domain.com:pass@smtp.domain.com',
+        defaults: {
+          from: '"nest-modules" <modules@nestjs.com>',
+        },
+        template: {
+          dir: __dirname + '/templates',
+          adapter: new HandlebarsAdapter(),
+          options: {
+            strict: true,
+          },
+        },
+        options: {
+          partials: {
+            dir: path.join(process.env.PWD, 'templates/pages'),
+            options: {
+              strict: true
+            }
+          }
+        }
+      })
+    })
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

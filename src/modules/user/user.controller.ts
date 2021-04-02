@@ -16,7 +16,7 @@ export class UserController {
   constructor(
     private usersService: UserService,
     private reviewService: ReviewService,
-  ) {}
+  ) { }
 
   @Get('/all')
   async findAll() {
@@ -44,7 +44,7 @@ export class UserController {
   @Post()
   addUser(@Body() user) {
     console.log(Object.assign(new UserModel(), user));
-    return this.usersService.addUser(Object.assign(new UserModel(), user));
+    //return this.usersService.addUser(Object.assign(new UserModel(), user));
   }
 
   @Delete()
