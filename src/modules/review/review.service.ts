@@ -12,24 +12,24 @@ export class ReviewService {
 
     findBarReviews(id: number): Promise<Review[]> {
         return this.reviewRepository
-        .createQueryBuilder('review')
-        .leftJoin('review.bar', 'bar')
-        .where('bar.id = :id', { id: id })
-        .andWhere('review.isactive = 1')
-        .leftJoinAndSelect('review.user', 'user')
-        .where('user.isactive = 1')
-        .getMany()
+            .createQueryBuilder('review')
+            .leftJoin('review.bar', 'bar')
+            .where(`bar.id = ${id}`)
+            .andWhere('review.isactive = 1')
+            .leftJoinAndSelect('review.user', 'user')
+            .andWhere('user.isactive = 1')
+            .getMany()
     }
 
     findUserReviews(id: number): Promise<Review[]> {
         return this.reviewRepository
-        .createQueryBuilder('review')
-        .leftJoin('review.user', 'user')
-        .where('user.id = :id', { id: id })
-        .andWhere('review.isactive = 1')
-        .leftJoinAndSelect('review.bar', 'bar')
-        .where('bar.isactive = 1')
-        .getMany()
+            .createQueryBuilder('review')
+            .leftJoin('review.user', 'user')
+            .where('user.id = :id', { id: id })
+            .andWhere('review.isactive = 1')
+            .leftJoinAndSelect('review.bar', 'bar')
+            .andWhere('bar.isactive = 1')
+            .getMany()
     }
 
     findActives(): Promise<Review[]> {
