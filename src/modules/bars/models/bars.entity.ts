@@ -29,6 +29,9 @@ export class Bar {
     @Column()
     happy_hour: string;
 
+    @Column({ default: false })
+    terrace: boolean
+
     @Column({ type: 'json', nullable: true })
     coords: string;
 
