@@ -9,9 +9,10 @@ import { ReviewModule } from './modules/review/review.module';
 import { FollowModule } from './modules/follow/follow.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { MailerModule } from '@nestjs-modules/mailer';
-import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter'
-import { pathToFileURL } from 'url';
+import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
+import { BullModule } from 'nest-bull';
 
+const bullModule = BullModule.forRoot(mailBullConfig);
 @Module({
   imports: [
     TypeOrmModule.forRoot(),
