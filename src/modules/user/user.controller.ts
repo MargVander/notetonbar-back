@@ -6,10 +6,12 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ReviewService } from '../review/review.service';
 import { UserModel } from './model/user.model';
+import { JwtAuthGuard } from '../auth/jwt-auth-guard';
 
 @Controller('user')
 export class UserController {
@@ -26,6 +28,7 @@ export class UserController {
   async findOne(@Param() param) {
     return this.usersService.findOne(param.id);
   }
+  @UseGuards(JwtAuthGuard)
   @Get()
   async findActives() {
     return this.usersService.findActives();
@@ -39,6 +42,7 @@ export class UserController {
   @Get('/connect/connect')
   async findUserAuth(@Body() user) {
     return this.usersService.findOneToConnect(user.pseudo);
+
   }
 
   @Post()
