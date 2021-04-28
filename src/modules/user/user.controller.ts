@@ -28,7 +28,7 @@ export class UserController {
   async findOne(@Param() param) {
     return this.usersService.findOne(param.id);
   }
-  @UseGuards(JwtAuthGuard)
+  //@UseGuards(JwtAuthGuard)
   @Get()
   async findActives() {
     return this.usersService.findActives();
