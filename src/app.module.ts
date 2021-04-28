@@ -20,4 +20,4 @@ import { FollowModule } from './modules/follow/follow.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }
