@@ -24,7 +24,8 @@ export class BarService {
   }
 
   findOne(id: number): Promise<Bar> {
-    return this.barsRepository.findOne(id, { relations: ["pictures"] });
+    return this.barsRepository
+    .findOne(id, { relations: ["pictures", "rating"] })
   }
 
   addBar(datas:any) {
@@ -32,6 +33,7 @@ export class BarService {
   }
 
   updateBar(datas:any, id: number) {
+    datas.terrace = (datas.terrace == 'true');
     return this.barsRepository.update(id, datas)
   }
 
