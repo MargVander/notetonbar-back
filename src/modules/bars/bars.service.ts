@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Bar } from './models/bars.entity';
-import { CreateBarDto } from './models/create-bar.dto'
 
 @Injectable()
 export class BarService {
@@ -16,11 +15,17 @@ export class BarService {
   }
 
   findActives(): Promise<Bar[]> {
-    return this.barsRepository.createQueryBuilder('bar').leftJoinAndSelect('bar.pictures', 'pictures').where('bar.isactive = 1').getMany()
+    return this.barsRepository
+    .createQueryBuilder('bar')
+    .leftJoinAndSelect('bar.pictures', 'pictures')
+    .leftJoinAndSelect('bar.rating', 'bar_reviews')
+    .where('bar.isactive = 1')
+    .getMany()
   }
 
   findOne(id: number): Promise<Bar> {
-    return this.barsRepository.findOne(id, { relations: ["pictures"] });
+    return this.barsRepository
+    .findOne(id, { relations: ["pictures", "rating"] })
   }
 
   addBar(datas:any) {
@@ -28,6 +33,7 @@ export class BarService {
   }
 
   updateBar(datas:any, id: number) {
+    datas.terrace = (datas.terrace == 'true');
     return this.barsRepository.update(id, datas)
   }
 

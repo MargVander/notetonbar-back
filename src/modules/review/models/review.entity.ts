@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn, ManyToOne, JoinColumn } from "typeorm";
 import {Bar} from "../../bars/models/bars.entity";
 import {User} from "../../user/entities/user.entity"
 
@@ -13,12 +13,20 @@ export class Review {
     @Column()
     rating: number;
 
-    @Column()
+    @Column({ default: true })
     isactive: number;
 
-    @ManyToOne(() => Bar, bar => bar.reviews)
+    @ManyToOne(() => Bar, bar => bar.reviews, { nullable: false })
+    @JoinColumn({name: 'barId'})
     bar: Bar;
 
-    @ManyToOne(() => User, user => user.reviews)
+    @Column({  type: "int", nullable: false })
+     barId: number;
+
+    @ManyToOne(() => User, user => user.reviews, { nullable: false })
+    @JoinColumn({name: 'userId'})
     user: User;
+
+    @Column({  type: "int", nullable: false })
+     userId: number;
 }
