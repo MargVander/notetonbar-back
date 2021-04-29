@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Put, Param, Body, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Put, Param, Body, Delete, Query } from '@nestjs/common';
 import { BarService } from './bars.service';
 import { ReviewService } from '../review/review.service';
 import { CreateBarDto } from './models/create-bar.dto'
@@ -23,19 +23,8 @@ export class BarController {
     }
 
     @Get(':id/reviews')
-    async findReviews(@Param() param) {
-        return this.reviewService.findBarReviews(param.id);
-    }
-
-    @Get(':id/rating')
-    async getRating(@Param() param) {
-        const rating = this.findReviews(param)
-            .then(reviews => {
-                const average = reviews.reduce((total, next) => total + next.rating, 0) / reviews.length;
-                return average
-            }
-        )
-        return rating
+    async findReviews(@Param() param, @Query() query) {
+        return this.reviewService.findBarReviews(param.id, query.limit | 0);
     }
 
     @Post() 
