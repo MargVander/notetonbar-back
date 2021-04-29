@@ -5,7 +5,7 @@ var cors = require('cors');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.use(cors({origin: 'http://localhost:8080'}));
+  app.enableCors();
 
   const config = new DocumentBuilder()
     .setTitle('Note Ton Bar')
