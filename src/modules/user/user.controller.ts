@@ -6,14 +6,19 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { ReviewService } from '../review/review.service';
 import { UserModel } from './model/user.model';
+import { JwtAuthGuard } from '../auth/jwt-auth-guard';
 
 @Controller('user')
 export class UserController {
-  constructor(private usersService: UserService, private reviewService: ReviewService) {}
+  constructor(
+    private usersService: UserService,
+    private reviewService: ReviewService,
+  ) { }
 
   @Get('/all')
   async findAll() {
@@ -23,6 +28,7 @@ export class UserController {
   async findOne(@Param() param) {
     return this.usersService.findOne(param.id);
   }
+  //@UseGuards(JwtAuthGuard)
   @Get()
   async findActives() {
     return this.usersService.findActives();
@@ -33,10 +39,16 @@ export class UserController {
     return this.reviewService.findUserReviews(param.id);
   }
 
+  @Get('/connect/connect')
+  async findUserAuth(@Body() user) {
+    return this.usersService.findOneToConnect(user.pseudo);
+
+  }
+
   @Post()
   addUser(@Body() user) {
     console.log(Object.assign(new UserModel(), user));
-    return this.usersService.addUser(Object.assign(new UserModel(), user));
+    //return this.usersService.addUser(Object.assign(new UserModel(), user));
   }
 
   @Delete()

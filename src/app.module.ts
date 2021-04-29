@@ -7,6 +7,7 @@ import { BarModule } from './modules/bars/bars.module';
 import { PictureModule } from './modules/picture/picture.module';
 import { ReviewModule } from './modules/review/review.module';
 import { FollowModule } from './modules/follow/follow.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -16,8 +17,9 @@ import { FollowModule } from './modules/follow/follow.module';
     PictureModule,
     ReviewModule,
     FollowModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

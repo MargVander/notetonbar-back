@@ -7,11 +7,11 @@ import { User } from './entities/user.entity';
 export class UserService {
   constructor(
     @InjectRepository(User)
-    private usersReposiroty: Repository<User>,
+    private userRepository: Repository<User>,
   ) {}
 
   findAll(): Promise<User[]> {
-    return this.usersReposiroty
+    return this.userRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.followers', 'followers')
       .leftJoinAndSelect('user.following', 'following')
@@ -19,7 +19,7 @@ export class UserService {
   }
 
   findOne(id: number): Promise<User[]> {
-    return this.usersReposiroty
+    return this.userRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.followers', 'followers')
       .leftJoinAndSelect('user.following', 'following')
@@ -28,8 +28,15 @@ export class UserService {
       .getMany();
   }
 
+  findOneToConnect(pseudo: string): Promise<User> {
+    return this.userRepository
+      .createQueryBuilder('user')
+      .where('user.pseudo = :pseudo', { pseudo: pseudo })
+      .getOne();
+  }
+
   findActives(): Promise<unknown[]> {
-    return this.usersReposiroty
+    return this.userRepository
       .createQueryBuilder('user')
       .leftJoinAndSelect('user.followers', 'followers')
       .leftJoinAndSelect('user.following', 'following')
@@ -38,7 +45,7 @@ export class UserService {
   }
 
   addUser(user) {
-    return this.usersReposiroty
+    return this.userRepository
       .createQueryBuilder()
       .insert()
       .into('User')
@@ -47,7 +54,7 @@ export class UserService {
   }
 
   deleteUser(id) {
-    return this.usersReposiroty
+    return this.userRepository
       .createQueryBuilder()
       .update()
       .set({ isactive: false })
@@ -56,7 +63,7 @@ export class UserService {
   }
 
   updateUser(user) {
-    return this.usersReposiroty
+    return this.userRepository
       .createQueryBuilder()
       .update()
       .set(user)
