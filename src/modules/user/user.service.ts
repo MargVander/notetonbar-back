@@ -8,7 +8,7 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-  ) {}
+  ) { }
 
   findAll(): Promise<User[]> {
     return this.userRepository
@@ -68,6 +68,15 @@ export class UserService {
       .update()
       .set(user)
       .where('id = :id', { id: user.id })
+      .execute();
+  }
+
+  addPicture(file, id) {
+    return this.userRepository
+      .createQueryBuilder()
+      .update('user')
+      .set({ profile_picture: file })
+      .where('user.id = :id', { id: id })
       .execute();
   }
 }
