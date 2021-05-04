@@ -22,4 +22,8 @@ export class AuthService {
             access_token: this.jwtService.sign(payload),
         };
     }
+
+    Mail(mail: any) {
+        return this.UserService.findMail(mail.mail);
+    }
 }

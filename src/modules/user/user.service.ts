@@ -8,7 +8,7 @@ export class UserService {
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
-  ) {}
+  ) { }
 
   findAll(): Promise<User[]> {
     return this.userRepository
@@ -69,5 +69,11 @@ export class UserService {
       .set(user)
       .where('id = :id', { id: user.id })
       .execute();
+  }
+
+  findMail(mail: string) {
+    return this.userRepository.createQueryBuilder('user')
+      .where('user.mail = :mail', { mail: mail })
+      .getOne();
   }
 }
