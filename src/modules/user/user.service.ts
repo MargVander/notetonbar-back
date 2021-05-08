@@ -76,4 +76,18 @@ export class UserService {
       .where('user.mail = :mail', { mail: mail })
       .getOne();
   }
+
+  checkResponse(response: string, mail: string) {
+    return this.userRepository.createQueryBuilder('user')
+      .where('user.response = :response and user.mail = :mail', { response: response, mail: mail })
+      .getOne();
+  }
+
+  newMdp(param: any) {
+    return this.userRepository.createQueryBuilder()
+      .update('user')
+      .set({ password: param.password })
+      .where('user.response = :response and user.mail = :mail', { response: param.response, mail: param.mail })
+      .execute()
+  }
 }

@@ -23,7 +23,4 @@ export class AuthService {
         };
     }
 
-    Mail(mail: any) {
-        return this.UserService.findMail(mail.mail);
-    }
 }

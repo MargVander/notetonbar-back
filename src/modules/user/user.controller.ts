@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   UseGuards,
@@ -20,7 +21,7 @@ export class UserController {
     private reviewService: ReviewService,
   ) { }
 
-  @Get('/all')
+  @Get('all')
   async findAll() {
     return this.usersService.findAll();
   }
@@ -39,7 +40,7 @@ export class UserController {
     return this.reviewService.findUserReviews(param.id);
   }
 
-  @Get('/connect/connect')
+  @Get('connect')
   async findUserAuth(@Body() user) {
     return this.usersService.findOneToConnect(user.pseudo);
 
@@ -61,5 +62,20 @@ export class UserController {
   updateUser(@Body() user) {
     console.log(user);
     return this.usersService.updateUser(Object.assign(new UserModel(), user));
+  }
+
+  @Post('forgotPassword')
+  async forgotPassword(@Body() req) {
+    return this.usersService.findMail(req.mail)
+  }
+
+  @Post('checkResponse')
+  async checkResponse(@Body() req) {
+    return this.usersService.checkResponse(req.response, req.mail)
+  }
+
+  @Patch('newMdp')
+  async newMdp(@Body() req) {
+    return this.usersService.newMdp(req);
   }
 }

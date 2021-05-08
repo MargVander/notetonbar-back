@@ -12,10 +12,4 @@ export class AppController {
   async login(@Request() req) {
     return this.authService.login(req.user);
   }
-
-  @Post('auth/forgotPassword')
-  async forgotPassword(@Body() req) {
-    return this.authService.Mail(req)
-
-  }
 }
