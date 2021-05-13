@@ -8,8 +8,8 @@ export class BarController {
     constructor(private barsService: BarService, private reviewService: ReviewService) { }
 
     @Get()
-    async findActives() {
-        return this.barsService.findActives();
+    async findActives(@Query() query) {
+        return this.barsService.findActives(query.limit | 0);
     }
 
     @Get('all')

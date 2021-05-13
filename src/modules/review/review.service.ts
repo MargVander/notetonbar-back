@@ -34,8 +34,15 @@ export class ReviewService {
             .getMany()
     }
 
-    findActives(): Promise<Review[]> {
-        return this.reviewRepository.createQueryBuilder('review').where('review.isactive = 1').getMany()
+    findActives(limit: number = 0): Promise<Review[]> {
+        return this.reviewRepository
+        .createQueryBuilder('review')
+        .where('review.isactive = 1')
+        .leftJoinAndSelect('review.bar', 'bar')
+        .leftJoinAndSelect('review.user', 'user')
+        .orderBy("review.date", "DESC")
+        .take(limit)
+        .getMany()
     }
 
     findAll(): Promise<Review[]> {
