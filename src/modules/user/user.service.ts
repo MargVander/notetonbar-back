@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
+import { UserModel } from './model/user.model';
 
 @Injectable()
 export class UserService {
@@ -44,7 +45,7 @@ export class UserService {
       .getMany();
   }
 
-  addUser(user) {
+  addUser(user: UserModel) {
     return this.userRepository
       .createQueryBuilder()
       .insert()

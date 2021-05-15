@@ -12,6 +12,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
+import { Question } from './entities/user.entity';
 import { ReviewService } from '../review/review.service';
 import { UserModel } from './model/user.model';
 import { ForgotPasswordModel } from './model/forgotPassword.model';
@@ -44,10 +45,18 @@ export class UserController {
     return this.reviewService.findUserReviews(param.id);
   }
 
+  @Get('signUp/question')
+  async findQuestions() {
+    console.log("ok");
+
+    return Question;
+  }
+
   @Post()
   addUser(@Body() user) {
-    console.log(Object.assign(new UserModel(), user));
-    //return this.usersService.addUser(Object.assign(new UserModel(), user));
+    console.log(user);
+
+    return this.usersService.addUser(Object.assign(new UserModel(), user));
   }
 
   @Delete()
