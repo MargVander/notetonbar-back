@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -12,7 +14,9 @@ import {
 import { UserService } from './user.service';
 import { ReviewService } from '../review/review.service';
 import { UserModel } from './model/user.model';
+import { ForgotPasswordModel } from './model/forgotPassword.model';
 import { JwtAuthGuard } from '../auth/jwt-auth-guard';
+import { CheckReponseModel } from './model/checkResponse.model';
 
 @Controller('user')
 export class UserController {
@@ -40,12 +44,6 @@ export class UserController {
     return this.reviewService.findUserReviews(param.id);
   }
 
-  @Get('connect')
-  async findUserAuth(@Body() user) {
-    return this.usersService.findOneToConnect(user.pseudo);
-
-  }
-
   @Post()
   addUser(@Body() user) {
     console.log(Object.assign(new UserModel(), user));
@@ -67,15 +65,29 @@ export class UserController {
   @Post('forgotPassword')
   async forgotPassword(@Body() req) {
     return this.usersService.findMail(req.mail)
+      .then(data =>
+        Object.assign(new ForgotPasswordModel(), { "mail": data.mail, "question": data.question })
+      )
+      .catch(() => { throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND) })
   }
 
   @Post('checkResponse')
   async checkResponse(@Body() req) {
+
     return this.usersService.checkResponse(req.response, req.mail)
+      .then(data =>
+        Object.assign(new CheckReponseModel(), { "mail": data.mail, "reponse": data.response })
+      )
+      .catch(() => { throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND) })
   }
 
   @Patch('newMdp')
   async newMdp(@Body() req) {
-    return this.usersService.newMdp(req);
+    return this.usersService.newMdp(req)
+      .then(() => {
+        return { "response": "ok" };
+      })
+      .catch(() => { throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND) })
+
   }
 }

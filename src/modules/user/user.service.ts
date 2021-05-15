@@ -28,10 +28,10 @@ export class UserService {
       .getMany();
   }
 
-  findOneToConnect(pseudo: string): Promise<User> {
+  findOneToConnect(mail: string): Promise<User> {
     return this.userRepository
       .createQueryBuilder('user')
-      .where('user.pseudo = :pseudo', { pseudo: pseudo })
+      .where('user.mail = :mail', { mail: mail })
       .getOne();
   }
 
