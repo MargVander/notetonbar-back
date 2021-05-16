@@ -29,6 +29,12 @@ export class UserService {
       .getMany();
   }
 
+  findOneSimple(id: number): Promise<User> {
+    return this.userRepository.createQueryBuilder('user')
+      .where('user.id = :id', { id: id })
+      .getOne();
+  }
+
   findOneToConnect(mail: string): Promise<User> {
     return this.userRepository
       .createQueryBuilder('user')

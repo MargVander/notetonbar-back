@@ -18,6 +18,7 @@ import { UserModel } from './model/user.model';
 import { ForgotPasswordModel } from './model/forgotPassword.model';
 import { JwtAuthGuard } from '../auth/jwt-auth-guard';
 import { CheckReponseModel } from './model/checkResponse.model';
+import { UserSimpleModel } from './model/userSimple.model';
 
 @Controller('user')
 export class UserController {
@@ -32,7 +33,12 @@ export class UserController {
   }
   @Get(':id')
   async findOne(@Param() param) {
-    return this.usersService.findOne(param.id);
+    //return this.usersService.findOne(param.id);
+    return this.usersService.findOneSimple(param.id)
+      .then((data) => {
+        return Object.assign(new UserSimpleModel(), { "pseudo": data.pseudo, "mail": data.mail, "profile_picture": data.profile_picture })
+      })
+      .catch(() => { throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND) })
   }
   //@UseGuards(JwtAuthGuard)
   @Get()
@@ -47,8 +53,6 @@ export class UserController {
 
   @Get('signUp/question')
   async findQuestions() {
-    console.log("ok");
-
     return Question;
   }
 

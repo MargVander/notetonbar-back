@@ -21,6 +21,9 @@ export class AuthService {
         const payload = { pseudo: user.pseudo, sub: user.id };
         return {
             access_token: this.jwtService.sign(payload),
+            expire_in: Date.now() + (3600 * 2),
+            id: user.id
+
         };
     }
 
