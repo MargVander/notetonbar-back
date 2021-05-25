@@ -33,10 +33,13 @@ export class UserController {
     private reviewService: ReviewService,
   ) { }
 
+  @UseGuards(JwtAuthGuard)
   @Get('all')
   async findAll() {
     return this.usersService.findAll();
   }
+
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findOne(@Param() param) {
     //return this.usersService.findOne(param.id);
@@ -46,12 +49,14 @@ export class UserController {
       })
       .catch(() => { throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND) })
   }
-  //@UseGuards(JwtAuthGuard)
+
+  @UseGuards(JwtAuthGuard)
   @Get()
   async findActives() {
     return this.usersService.findActives();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id/reviews')
   async findReviews(@Param() param) {
     return this.reviewService.findUserReviews(param.id);
@@ -64,17 +69,17 @@ export class UserController {
 
   @Post()
   addUser(@Body() user) {
-    console.log(user);
-
     return this.usersService.addUser(Object.assign(new UserModel(), user));
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete()
   deleteUser(@Body() id) {
     console.log(id.id);
     return this.usersService.deleteUser(id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Put()
   updateUser(@Body() user) {
     return this.usersService.updateUser(Object.assign(new UserModel(), user));
@@ -108,6 +113,7 @@ export class UserController {
       .catch(() => { throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND) })
 
   }
+
   @Post('avatar/:id')
   @UseInterceptors(
     FileInterceptor('photo', {
@@ -124,6 +130,7 @@ export class UserController {
     return this.usersService.addPicture(file.filename, param.id)
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('avatar/:fileId')
   async servePicture(@Param('fileId') fileId, @Res() res): Promise<any> {
     res.sendFile(fileId, { root: 'photos' });

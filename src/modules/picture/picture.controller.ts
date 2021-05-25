@@ -8,16 +8,19 @@ import {
     UseInterceptors,
     UploadedFile,
     Delete,
+    UseGuards
 } from '@nestjs/common';
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express'
 import { extname } from 'path';
-import { PictureService } from './picture.service'
+import { PictureService } from './picture.service';
+import { JwtAuthGuard } from '../auth/jwt-auth-guard';
 
 @Controller('pictures')
 export class PictureController {
     constructor(private pictureService: PictureService) { }
 
+    @UseGuards(JwtAuthGuard)
     @Post('bar/:id')
     @UseInterceptors(
         FileInterceptor('photo', {
@@ -34,11 +37,13 @@ export class PictureController {
         return this.pictureService.addPicture(file, param.id)
     }
 
+    @UseGuards(JwtAuthGuard)
     @Get(':fileId')
     async servePicture(@Param('fileId') fileId, @Res() res): Promise<any> {
         res.sendFile(fileId, { root: 'photos' });
     }
 
+    @UseGuards(JwtAuthGuard)
     @Delete(':fileId')
     async deletePicture(@Param('fileId') fileId, @Body() body): Promise<any> {
         const fs = require('fs')
