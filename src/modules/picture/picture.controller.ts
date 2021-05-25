@@ -18,6 +18,11 @@ import { PictureService } from './picture.service'
 export class PictureController {
     constructor(private pictureService: PictureService) { }
 
+    @Get('bar/:id')
+    async findBarPictures(@Param() param) {
+        return this.pictureService.findBarPictures(param.id);
+    }
+
     @Post('bar/:id')
     @UseInterceptors(
         FileInterceptor('photo', {

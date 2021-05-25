@@ -13,17 +13,25 @@ export class PictureService {
 
   addPicture(@UploadedFile() file, id: number) {
     return this.picturesRepository.save({
-        barId: id,
-        path: file.filename
+      barId: id,
+      path: file.filename
     })
   }
 
   deletePicture(id: number) {
     return this.picturesRepository
-    .createQueryBuilder()
-    .delete()
-    .from(Picture)
-    .where("id = :id", { id: id })
-    .execute();
+      .createQueryBuilder()
+      .delete()
+      .from(Picture)
+      .where("id = :id", { id: id })
+      .execute();
+  }
+
+  findBarPictures(id: number): Promise<Picture[]> {
+    return this.picturesRepository
+      .createQueryBuilder('picture')
+      .leftJoin('picture.bar', 'bar')
+      .where(`bar.id = ${id}`)
+      .getMany()
   }
 }

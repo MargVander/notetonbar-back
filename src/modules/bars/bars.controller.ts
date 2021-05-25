@@ -16,6 +16,11 @@ export class BarController {
     async findAll() {
         return this.barsService.findAll();
     }
+    
+    @Get('bypopularity')
+        async findPopulars() {
+            return this.barsService.findPopulars();
+        }
 
     @Get(':id')
     async findOne(@Param() param) {
