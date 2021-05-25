@@ -42,7 +42,6 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findOne(@Param() param) {
-    //return this.usersService.findOne(param.id);
     return this.usersService.findOneSimple(param.id)
       .then((data) => {
         return Object.assign(new UserSimpleModel(), { "pseudo": data.pseudo, "mail": data.mail, "profile_picture": data.profile_picture })
@@ -69,7 +68,8 @@ export class UserController {
 
   @Post()
   addUser(@Body() user) {
-    return this.usersService.addUser(Object.assign(new UserModel(), user));
+    return this.usersService.addUser(Object.assign(new UserModel(), user))
+
   }
 
   @UseGuards(JwtAuthGuard)
