@@ -7,8 +7,9 @@ export class AuthService {
     constructor(
         private UserService: UserService,
         private jwtService: JwtService) { }
-    async validateUser(username: string, pass: string): Promise<any> {
-        const user = await this.UserService.findOneToConnect(username);
+
+    async validateUser(mail: string, pass: string): Promise<any> {
+        const user = await this.UserService.findOneToConnect(mail);
         if (user && user.password === pass) {
             const { password, ...result } = user;
             return result;
@@ -20,6 +21,10 @@ export class AuthService {
         const payload = { pseudo: user.pseudo, sub: user.id };
         return {
             access_token: this.jwtService.sign(payload),
+            expire_in: Date.now() + (3600 * 2),
+            id: user.id
+
         };
     }
+
 }

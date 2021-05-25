@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
+import { UserModel } from './model/user.model';
 
 @Injectable()
 export class UserService {
@@ -28,10 +29,16 @@ export class UserService {
       .getMany();
   }
 
-  findOneToConnect(pseudo: string): Promise<User> {
+  findOneSimple(id: number): Promise<User> {
+    return this.userRepository.createQueryBuilder('user')
+      .where('user.id = :id', { id: id })
+      .getOne();
+  }
+
+  findOneToConnect(mail: string): Promise<User> {
     return this.userRepository
       .createQueryBuilder('user')
-      .where('user.pseudo = :pseudo', { pseudo: pseudo })
+      .where('user.mail = :mail', { mail: mail })
       .getOne();
   }
 
@@ -44,7 +51,7 @@ export class UserService {
       .getMany();
   }
 
-  addUser(user) {
+  addUser(user: UserModel) {
     return this.userRepository
       .createQueryBuilder()
       .insert()
@@ -69,6 +76,26 @@ export class UserService {
       .set(user)
       .where('id = :id', { id: user.id })
       .execute();
+  }
+
+  findMail(mail: string) {
+    return this.userRepository.createQueryBuilder('user')
+      .where('user.mail = :mail', { mail: mail })
+      .getOne();
+  }
+
+  checkResponse(response: string, mail: string) {
+    return this.userRepository.createQueryBuilder('user')
+      .where('user.response = :response and user.mail = :mail', { response: response, mail: mail })
+      .getOne();
+  }
+
+  newMdp(param: any) {
+    return this.userRepository.createQueryBuilder()
+      .update('user')
+      .set({ password: param.password })
+      .where('user.response = :response and user.mail = :mail', { response: param.response, mail: param.mail })
+      .execute()
   }
 
   addPicture(file, id) {
