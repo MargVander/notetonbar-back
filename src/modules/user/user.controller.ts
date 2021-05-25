@@ -5,11 +5,14 @@ import {
   Get,
   HttpException,
   HttpStatus,
+  Res,
   Param,
   Patch,
   Post,
   Put,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { Question } from './entities/user.entity';
@@ -19,6 +22,9 @@ import { ForgotPasswordModel } from './model/forgotPassword.model';
 import { JwtAuthGuard } from '../auth/jwt-auth-guard';
 import { CheckReponseModel } from './model/checkResponse.model';
 import { UserSimpleModel } from './model/userSimple.model';
+import { diskStorage } from 'multer';
+import { FileInterceptor } from '@nestjs/platform-express'
+import { extname } from 'path';
 
 @Controller('user')
 export class UserController {
@@ -71,7 +77,6 @@ export class UserController {
 
   @Put()
   updateUser(@Body() user) {
-    console.log(user);
     return this.usersService.updateUser(Object.assign(new UserModel(), user));
   }
 
@@ -102,5 +107,25 @@ export class UserController {
       })
       .catch(() => { throw new HttpException('NOT_FOUND', HttpStatus.NOT_FOUND) })
 
+  }
+  @Post('avatar/:id')
+  @UseInterceptors(
+    FileInterceptor('photo', {
+      storage: diskStorage({
+        destination: './photos',
+        filename: (req, file, cb) => {
+          const randomName = Array(32).fill(null).map(() => (Math.round(Math.random() * 16)).toString(16)).join('')
+          return cb(null, `${randomName}${extname(file.originalname)}`)
+        }
+      })
+    })
+  )
+  async uploadPicture(@UploadedFile() file, @Param() param) {
+    return this.usersService.addPicture(file.filename, param.id)
+  }
+
+  @Get('avatar/:fileId')
+  async servePicture(@Param('fileId') fileId, @Res() res): Promise<any> {
+    res.sendFile(fileId, { root: 'photos' });
   }
 }

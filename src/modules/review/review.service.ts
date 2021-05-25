@@ -10,7 +10,7 @@ export class ReviewService {
         private reviewRepository: Repository<Review>,
     ) { }
 
-    findBarReviews(id: number): Promise<Review[]> {
+    findBarReviews(id: number, limit: number = 0): Promise<Review[]> {
         return this.reviewRepository
             .createQueryBuilder('review')
             .leftJoin('review.bar', 'bar')
@@ -18,6 +18,8 @@ export class ReviewService {
             .andWhere('review.isactive = 1')
             .leftJoinAndSelect('review.user', 'user')
             .andWhere('user.isactive = 1')
+            .orderBy("review.date", "DESC")
+            .take(limit)
             .getMany()
     }
 
@@ -32,8 +34,15 @@ export class ReviewService {
             .getMany()
     }
 
-    findActives(): Promise<Review[]> {
-        return this.reviewRepository.createQueryBuilder('review').where('review.isactive = 1').getMany()
+    findActives(limit: number = 0): Promise<Review[]> {
+        return this.reviewRepository
+        .createQueryBuilder('review')
+        .where('review.isactive = 1')
+        .leftJoinAndSelect('review.bar', 'bar')
+        .leftJoinAndSelect('review.user', 'user')
+        .orderBy("review.date", "DESC")
+        .take(limit)
+        .getMany()
     }
 
     findAll(): Promise<Review[]> {

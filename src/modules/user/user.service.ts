@@ -97,4 +97,13 @@ export class UserService {
       .where('user.response = :response and user.mail = :mail', { response: param.response, mail: param.mail })
       .execute()
   }
+
+  addPicture(file, id) {
+    return this.userRepository
+      .createQueryBuilder()
+      .update('user')
+      .set({ profile_picture: file })
+      .where('user.id = :id', { id: id })
+      .execute();
+  }
 }

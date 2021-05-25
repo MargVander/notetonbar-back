@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { ReviewService } from './review.service';
 import { CreateReviewDto } from './models/create-review.dto'
@@ -16,8 +17,8 @@ export class ReviewController {
 
 
   @Get()
-  async findActives() {
-    return this.reviewService.findActives();
+  async findActives(@Query() query) {
+    return this.reviewService.findActives(query.limit | 0);
   }
 
   @Get('/all')

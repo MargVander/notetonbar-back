@@ -16,6 +16,9 @@ export class Review {
     @Column({ default: true })
     isactive: number;
 
+    @Column({type: "datetime", default: () => "CURRENT_TIMESTAMP"})
+    date: Date;
+
     @ManyToOne(() => Bar, bar => bar.reviews, { nullable: false })
     @JoinColumn({name: 'barId'})
     bar: Bar;

@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn, OneToMany, OneToOne } from "typeorm";
-import {Picture} from "../../picture/models/picture.entity";
-import {Review} from "../../review/models/review.entity";
-import {BarReviews} from "./barReviews.entity"
+import { Picture } from "../../picture/models/picture.entity";
+import { Review } from "../../review/models/review.entity";
+import { BarReviews } from "./barReviews.entity"
 
 @Entity()
 export class Bar {
@@ -43,6 +43,9 @@ export class Bar {
 
     @Column({ default: true })
     isactive: boolean
+
+    @Column({type: "datetime", default: () => "CURRENT_TIMESTAMP"})
+    date: Date
 
     @OneToMany(() => Picture, picture => picture.bar)
     pictures: Picture[];
