@@ -14,12 +14,14 @@ export class BarService {
     return this.barsRepository.find();
   }
 
-  findActives(): Promise<Bar[]> {
+  findActives(limit: number = 0): Promise<Bar[]> {
     return this.barsRepository
     .createQueryBuilder('bar')
     .leftJoinAndSelect('bar.pictures', 'pictures')
     .leftJoinAndSelect('bar.rating', 'bar_reviews')
     .where('bar.isactive = 1')
+    .orderBy("bar.date", "DESC")
+    .take(limit)
     .getMany()
   }
 
