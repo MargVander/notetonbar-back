@@ -37,7 +37,6 @@ export class PictureController {
         return this.pictureService.addPicture(file, param.id)
     }
 
-    @UseGuards(JwtAuthGuard)
     @Get(':fileId')
     async servePicture(@Param('fileId') fileId, @Res() res): Promise<any> {
         res.sendFile(fileId, { root: 'photos' });
