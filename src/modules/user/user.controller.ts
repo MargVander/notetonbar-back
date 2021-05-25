@@ -25,6 +25,7 @@ import { UserSimpleModel } from './model/userSimple.model';
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express'
 import { extname } from 'path';
+import * as bcrypt from 'bcrypt';
 
 @Controller('user')
 export class UserController {
@@ -67,7 +68,12 @@ export class UserController {
   }
 
   @Post()
-  addUser(@Body() user) {
+  async addUser(@Body() user) {
+    const saltOrRounds = 10;
+    const { password, ...rest } = user
+    const hash = await bcrypt.hash(password, saltOrRounds);
+    user.password = hash;
+
     return this.usersService.addUser(Object.assign(new UserModel(), user))
 
   }
@@ -106,6 +112,11 @@ export class UserController {
 
   @Patch('newMdp')
   async newMdp(@Body() req) {
+    const { password, ...rest } = req
+    const saltOrRounds = 10;
+    const hash = await bcrypt.hash(password, saltOrRounds);
+    req.password = hash
+
     return this.usersService.newMdp(req)
       .then(() => {
         return { "response": "ok" };
