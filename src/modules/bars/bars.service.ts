@@ -25,6 +25,17 @@ export class BarService {
     .getMany()
   }
 
+  findPopulars(limit: number = 0): Promise<Bar[]> {
+    return this.barsRepository
+    .createQueryBuilder('bar')
+    .leftJoinAndSelect('bar.pictures', 'pictures')
+    .leftJoinAndSelect('bar.rating', 'bar_reviews')
+    .where('bar.isactive = 1')
+    .orderBy("bar_reviews.avg_rating", "DESC")
+    .take(limit)
+    .getMany()
+  }
+
   findOne(id: number): Promise<Bar> {
     return this.barsRepository
     .findOne(id, { relations: ["pictures", "rating"] })

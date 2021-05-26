@@ -20,6 +20,12 @@ export class BarController {
     async findAll() {
         return this.barsService.findAll();
     }
+    
+    @UseGuards(JwtAuthGuard)
+    @Get('bypopularity')
+        async findPopulars(@Query() query) {
+            return this.barsService.findPopulars(query.limit | 0);
+        }
 
     @UseGuards(JwtAuthGuard)
     @Get(':id')

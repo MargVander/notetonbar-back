@@ -20,7 +20,12 @@ import { JwtAuthGuard } from '../auth/jwt-auth-guard';
 export class PictureController {
     constructor(private pictureService: PictureService) { }
 
-    @UseGuards(JwtAuthGuard)
+    @Get('bar/:id')
+    async findBarPictures(@Param() param) {
+        return this.pictureService.findBarPictures(param.id);
+    }
+
+    // @UseGuards(JwtAuthGuard)
     @Post('bar/:id')
     @UseInterceptors(
         FileInterceptor('photo', {

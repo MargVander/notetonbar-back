@@ -26,7 +26,7 @@ export class Bar {
     @Column({ type: 'json', nullable: true })
     hours: string;
 
-    @Column()
+    @Column({nullable: true})
     happy_hour: string;
 
     @Column({ default: false })
@@ -38,7 +38,7 @@ export class Bar {
     @Column()
     website_link: string
 
-    @Column()
+    @Column({nullable: true})
     qrcode_menu: string
 
     @Column({ default: true })
