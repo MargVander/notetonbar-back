@@ -25,6 +25,7 @@ import { UserSimpleModel } from './model/userSimple.model';
 import { diskStorage } from 'multer';
 import { FileInterceptor } from '@nestjs/platform-express'
 import { extname } from 'path';
+import * as bcrypt from 'bcrypt';
 
 @Controller('user')
 export class UserController {
@@ -42,7 +43,6 @@ export class UserController {
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findOne(@Param() param) {
-    //return this.usersService.findOne(param.id);
     return this.usersService.findOneSimple(param.id)
       .then((data) => {
         return Object.assign(new UserSimpleModel(), { "pseudo": data.pseudo, "mail": data.mail, "profile_picture": data.profile_picture })
@@ -68,8 +68,14 @@ export class UserController {
   }
 
   @Post()
-  addUser(@Body() user) {
-    return this.usersService.addUser(Object.assign(new UserModel(), user));
+  async addUser(@Body() user) {
+    const saltOrRounds = 10;
+    const { password, ...rest } = user
+    const hash = await bcrypt.hash(password, saltOrRounds);
+    user.password = hash;
+
+    return this.usersService.addUser(Object.assign(new UserModel(), user))
+
   }
 
   @UseGuards(JwtAuthGuard)
@@ -106,6 +112,11 @@ export class UserController {
 
   @Patch('newMdp')
   async newMdp(@Body() req) {
+    const { password, ...rest } = req
+    const saltOrRounds = 10;
+    const hash = await bcrypt.hash(password, saltOrRounds);
+    req.password = hash
+
     return this.usersService.newMdp(req)
       .then(() => {
         return { "response": "ok" };

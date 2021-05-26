@@ -18,7 +18,7 @@ export class ReviewController {
   constructor(private reviewService: ReviewService) { }
 
 
-  @UseGuards(JwtAuthGuard)
+  //@UseGuards(JwtAuthGuard)
   @Get()
   async findActives(@Query() query) {
     return this.reviewService.findActives(query.limit | 0);
