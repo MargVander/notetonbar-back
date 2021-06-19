@@ -2,7 +2,7 @@ require('dotenv/config');
 
 const host = {
   dev: 'localhost',
-  production: process.env.HOST,
+  production: process.env.HOST_ENV,
 };
 
 const port = {
@@ -12,12 +12,12 @@ const port = {
 
 const username = {
   dev: 'root',
-  production: process.env.USERNAME,
+  production: process.env.USERNAME_ENV,
 };
 
 const password = {
   dev: 'root',
-  production: process.env.PASSWORD,
+  production: process.env.PASSWORD_ENV,
 };
 
 module.exports = {
